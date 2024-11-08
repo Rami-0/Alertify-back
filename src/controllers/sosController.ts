@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 const prisma = new PrismaClient();
 
 export const createSos = async (req: Request, res: Response): Promise<Response | void> => {
-	const { uid, lat, lng, contacts, email } = req.body;
+	const { uid, contacts, email } = req.body;
 	console.log(req.body);
 
 	try {
@@ -20,8 +20,8 @@ export const createSos = async (req: Request, res: Response): Promise<Response |
 			const updatedSos = await prisma.sOS.update({
 				where: { id: existingSos.id },
 				data: {
-					lat,
-					lng,
+					lat: user.position?.latitude,
+					lng: user.position?.longitude,
 					contacts: user.phoneNumber,
 					email: email || user.email,
 					isConfirmed: true,
@@ -31,9 +31,11 @@ export const createSos = async (req: Request, res: Response): Promise<Response |
 		}
 
 		const newSos = await prisma.sOS.create({
-			data: {
-				lat,
-				lng,
+      data: {
+        // @ts-ignore
+				lat: user?.position?.latitude,
+        // @ts-ignore
+				lng: user?.position?.longitude,
 				contacts: user.phoneNumber,
 				email: email || user.email,
 				isConfirmed: true,

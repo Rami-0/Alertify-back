@@ -11,8 +11,8 @@ router.get('/all', async (req: Request, res: Response) => {
 	}
 });
 
-router.get('/nearest', async (req: Request, res: Response) => {
-	try {
+router.post('/nearest', async (req: Request, res: Response) => {
+  try {
 		await findNearestPolice(req, res);
 	} catch (error) {
 		res.status(500).json({ message: 'Internal server error.' });

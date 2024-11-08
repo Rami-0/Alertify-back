@@ -36,7 +36,8 @@ model SOS {
   id            Int     @id @default(autoincrement())
   lat           Float
   lng           Float
-  nearestUser   Int?
+  police        Police?  @relation("PoliceSOS", fields: [policeId], references: [id])
+  policeId      Int?
   contacts      String?
   email         String @unique
   isConfirmed   Boolean @default(false)
@@ -50,6 +51,8 @@ model Police {
   isOnline     Boolean   @default(false)
   position     Position  @relation("PolicePosition", fields: [positionId], references: [id])
   positionId   Int       @unique // Foreign key to Position model
+
+  sos          SOS[]     @relation("PoliceSOS")
 
   @@map("Police") // Use uppercase Police in the database
 }
